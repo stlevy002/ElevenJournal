@@ -38,16 +38,46 @@ function userSignUp() {
     /* *************************
     *** USER LOGIN ***
     ************************** */
+    
     function userLogin() {
+        let userEmail = document.getElementById('emailLogin').value;
+        let userPass = document.getElementById('pwdLogin').value;
+        console.log(userEmail, userPass)
+
+        let userData = {
+            user: {
+                email: userEmail,
+                password: userPass
+            }
+        }
+        console.log(userData)
+
+        fetch(`http://localhost:3000/user/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+        })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data)
+              let token = data.sessionToken;
+              localStorage.setItem('SessionToken', token);
+              tokenChecker();
+            })
+            .catch(err => {
+                console.error(err)
+            })
     //  console.log('userLogin Function Called')
-    
     }
-    
-    
     /* *************************
     *** USER LOGOUT ***
     ************************** */
     function userLogout() {
+        localStorage.setItem('SessionToken', undefined);
+        console.log(`SessionToken --> ${localStorage.sessionToken}`);
+        tokenChecker();
      console.log('userLogout Function Called')
     }
     
